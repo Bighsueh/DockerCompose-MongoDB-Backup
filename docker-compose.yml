@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  private-mongodb:
+    image: mongo:4.4.9
+    container_name: private_mongodb_container
+    ports:
+      - "127.0.0.1:27017:27017"
+
+  public-mongodb:
+    image: mongo:4.4.9
+    container_name: public_mongodb_container
+    ports:
+      - "27020:27017"
+
+  backup_mongo:
+    build:
+      context: ./backup_mongo
+    container_name: backup_mongo
+    links:
+      - private-mongodb:mongo_source
+      - public-mongodb:mongo_target
